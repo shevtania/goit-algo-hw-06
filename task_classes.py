@@ -6,6 +6,9 @@ class Field:
 
     def __str__(self):
         return str(self.value)
+    
+#class ValueError(Exception):
+#    pass    
 
 class Name(Field):
     def __init__(self, value:str):
@@ -13,7 +16,7 @@ class Name(Field):
   
 class Phone(Field):
     def __init__(self, value:str):
-        if len(value) == 10:  # checking l
+        if len(value) == 10 and value.isdigit(): # checking
            self.value = value
         else:
             raise ValueError
@@ -46,11 +49,13 @@ class Record:
         if old_phone in self.phones:
             self.phones.remove(old_phone)
             self.phones.append(new_phone)
+        else:
+            raise ValueError   
 
     def find_phone(self, phone:str):
-        phone = Phone(phone)
-        if  phone in self.phones:
-            return phone
+        for  item in self.phones:
+            if item == phone:
+                return item
         return None
 
 
@@ -71,8 +76,7 @@ class AddressBook(UserDict):
         return None
     
     def delete(self, name:str):
-        record = Record(Name(name))
-        self.data.get(record.name.value)
+        self.data.pop(name, None)
 
     def __str__(self):
         return  '\n'.join([str(i) for i in self.values()])
@@ -94,13 +98,16 @@ book.add_record(jane_record)
 
     # Виведення всіх записів у книзі
      
-print(book)
+#print(book)
 john = book.find("John")
 print(john)
 found_phone = john.find_phone("5555555555")
 print(f"{john.name}: {found_phone}")
-john_record.remove_phone("1234567890")
-print(john_record)
+#john_record.remove_phone("1234567890")
+#print(john_record)
 john_record.edit_phone("5555555555", "0987654321")
 print(john_record)
-john_record.edit_phone("0987654321", "04545454")
+#john_record.edit_phone("0987654321", "0454588787")
+#john.add_phone('1234567890')
+book.delete("Jane")
+print(book)
